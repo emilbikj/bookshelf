@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Books</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+        <div class="w3-row-padding w3-margin-top" th:fragment="list(books)">
+            <div class="w3-col s12 m4 l3" th:each="b : ${books}">
+                <a href="book.html" th:href="@{/book(bookId=${b.id})}" class="w3-card-4" style="display:block">
+                    <img src="http://via.placeholder.com/300x300" style="width:100%"/>
+                    <div class="w3-container">
+                        <h3 th:text="${b.title}">La Geometria Mar</h3>
+                        <p th:text="${b.author}">Herodes Palomo Chavez</p>
+                    </div>
+                </a>
+            </div>
+
+        </div>
+        
+        <div class="w3-row-padding w3-margin-top" th:fragment="give-list(books, user)">
+            <div class="w3-col s12 m4 l3 w3-margin-top" th:each="b : ${books}">
+                <form th:action="@{/manage/give}" class="w3-card-4" method="post">
+                    <input type="hidden" name="userId" th:value="${user.id}" />
+                    <input type="hidden" name="bookId" th:value="${b.id}" />
+                    <img src="http://via.placeholder.com/300x300" style="width:100%"/>
+                    <div class="w3-container">
+                        <h3 th:text="${b.title}">La Geometria Mar</h3>
+                        <p th:text="${b.author}">Herodes Palomo Chavez</p>
+                    </div>
+                    <button class="w3-button w3-blue w3-block">Give</button>
+                </form>
+            </div>
+
+        </div>
+        
+        <div class="w3-row-padding w3-margin-top" th:fragment="take-list(books, user)">
+            <div class="w3-col s12 m4 l3 w3-margin-top" th:each="b : ${books}">
+                <form th:action="@{/manage/take}" class="w3-card-4" method="post">
+                    <input type="hidden" name="userId" th:value="${user.id}" />
+                    <input type="hidden" name="bookId" th:value="${b.id}" />
+                    <img src="http://via.placeholder.com/300x300" style="width:100%"/>
+                    <div class="w3-container">
+                        <h3 th:text="${b.title}">La Geometria Mar</h3>
+                        <p th:text="${b.author}">Herodes Palomo Chavez</p>
+                    </div>
+                    <button class="w3-button w3-blue w3-block">Take</button>
+                </form>
+            </div>
+
+        </div>
+    </body>
+</html>
