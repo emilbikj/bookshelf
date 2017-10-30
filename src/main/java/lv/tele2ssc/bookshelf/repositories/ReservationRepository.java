@@ -18,11 +18,16 @@ public interface ReservationRepository extends CrudRepository<Reservation, Long>
     List<Reservation> findAllByUser(User user);
     
     @Query("SELECT r FROM Reservation r WHERE r.book = ?1 "
-            + " AND r.status = 'AVAILABLE' AND r.user = ?2 ORDER BY r.created")
+            + " AND r.status = 'AVAILABLE' AND r.user = ?2")
     Reservation findAvailable(Book book, User user);
     
     @Query("SELECT r FROM Reservation r WHERE r.book = ?1 "
-            + " AND r.status = 'TAKEN' AND r.user = ?2 ORDER BY r.created")
+            + " AND r.status = 'TAKEN' AND r.user = ?2")
     Reservation findTaken(Book book, User user);
+    
+    
+    @Query("SELECT r FROM Reservation r WHERE r.book = ?1 "
+            + " AND r.status <> 'CLOSED' AND r.user = ?2")
+    List<Reservation> findExistingRervations(Book book, User user);
     
 }

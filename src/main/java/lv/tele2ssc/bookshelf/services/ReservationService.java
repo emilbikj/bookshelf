@@ -26,15 +26,18 @@ public class ReservationService {
         reservation.setUser(user);
         reservation.setCreated(new Timestamp(System.currentTimeMillis()));
         
-        List<Reservation> existing = reservationRepository.findNotClosedByBook(book);
+        List<Reservation> alreadyExist=reservationRepository.findExistingRervations(book, user);
         
-        if (existing.isEmpty()) {
-            reservation.setStatus(ReservationStatus.AVAILABLE);
-        } else {
-            reservation.setStatus(ReservationStatus.IN_QUEUE);
+        if (alreadyExist.isEmpty()) {
+            List<Reservation> existing = reservationRepository.findNotClosedByBook(book);
+
+            if (existing.isEmpty()) {
+                reservation.setStatus(ReservationStatus.AVAILABLE);
+            } else {
+                reservation.setStatus(ReservationStatus.IN_QUEUE);
+            }
+            reservationRepository.save(reservation);
         }
-        
-        reservationRepository.save(reservation);
     }
     
     public void giveBook(User user, Book book) {
@@ -47,5 +50,14 @@ public class ReservationService {
         Reservation reservation = reservationRepository.findTaken(book, user);
         reservation.setStatus(ReservationStatus.CLOSED);
         reservationRepository.save(reservation);
+        
+        List<Reservation> existing = reservationRepository.findNotClosedByBook(book);
+        if (existing.isEmpty()) {
+            return;
+        } else {
+            Reservation availableReservation = existing.get(0);
+            availableReservation.setStatus(ReservationStatus.AVAILABLE);
+            reservationRepository.save(availableReservation);
+        }
     }
 }
